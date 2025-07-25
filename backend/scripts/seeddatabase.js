@@ -37,5 +37,3 @@ const runSeeder = async () => {
 if (require.main === module) {
   runSeeder();
 }
-
-module.exports = runseeder;

@@ -3,6 +3,9 @@ import axios from 'axios';
 
 const AuthContext = createContext();
 
+// Configure axios defaults
+axios.defaults.baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const authReducer = (state, action) => {
   switch (action.type) {
     case 'LOGIN_SUCCESS':
@@ -62,10 +65,16 @@ export const AuthProvider = ({ children }) => {
     const user = localStorage.getItem('user');
     
     if (token && user) {
-      dispatch({
-        type: 'LOGIN_SUCCESS',
-        payload: { token, user: JSON.parse(user) }
-      });
+      try {
+        dispatch({
+          type: 'LOGIN_SUCCESS',
+          payload: { token, user: JSON.parse(user) }
+        });
+      } catch (error) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
     } else {
       dispatch({ type: 'SET_LOADING', payload: false });
     }
@@ -74,7 +83,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+      const response = await axios.post('/api/auth/login', {
         username,
         password
       });
@@ -102,7 +111,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (username, password) => {
     try {
       dispatch({ type: 'SET_LOADING', payload: true });
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, {
+      const response = await axios.post('/api/auth/signup', {
         username,
         password
       });
