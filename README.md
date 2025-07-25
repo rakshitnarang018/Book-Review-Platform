@@ -1,6 +1,6 @@
 # Book-Review-Platform: Full-Stack Book Review Platform #
 
-*This** is a modern and responsive book review web application built using the **MERN stack (MongoDB, Express.js, React, Node.js)**. Users can explore books, filter them by genre/author, post reviews, and rate books from 1 to 5 stars. Designed as a 48-hour full-stack challenge, it demonstrates clean architecture, modern UI, and secure authentication.
+*This* is a modern and responsive book review web application built using the **MERN stack (MongoDB, Express.js, React, Node.js)**. Users can explore books, filter them by genre/author, post reviews, and rate books from 1 to 5 stars. Designed as a 48-hour full-stack challenge, it demonstrates clean architecture, modern UI, and secure authentication.
 
 ---
 
