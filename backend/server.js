@@ -9,9 +9,20 @@ const app = express();
 // Connect to MongoDB
 connectDB();
 
-// CORS Configuration - FIX FOR FRONTEND CONNECTION
+// ✅ CORS Configuration - FIX FOR MULTIPLE FRONTENDS
+const allowedOrigins = process.env.FRONTEND_URLS?.split(',').map(origin =>
+  origin.trim().replace(/\/$/, '')
+) || [];
+
 const corsOptions = {
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman or curl)
+    if (!origin || allowedOrigins.includes(origin.replace(/\/$/, ''))) {
+      callback(null, true);
+    } else {
+      callback(new Error('❌ CORS blocked for origin: ' + origin));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -43,5 +54,5 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📚 API: http://localhost:${PORT}`);
-  console.log(`🌐 CORS enabled for: ${corsOptions.origin}`);
+  console.log(`🌐 CORS enabled for: ${allowedOrigins.join(', ')}`);
 });
