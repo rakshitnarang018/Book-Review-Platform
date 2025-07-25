@@ -6,14 +6,25 @@ const api = axios.create({
   baseURL: API_URL,
 });
 
-// Books API
+// ✅ Add token to every request
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// 📚 Books API
 export const booksAPI = {
   getBooks: (params = {}) => api.get('/api/books', { params }),
   getBook: (id) => api.get(`/api/books/${id}`),
   addBook: (bookData) => api.post('/api/books', bookData),
 };
 
-// Reviews API
+// ✍️ Reviews API
 export const reviewsAPI = {
   getReviews: (bookId) => api.get(`/api/reviews/${bookId}`),
   addReview: (bookId, reviewData) => api.post(`/api/reviews/${bookId}`, reviewData),
